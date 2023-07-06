@@ -29,6 +29,14 @@ void up_line(double x1, double y1, double x2, double y2, string stroke, double s
     cout << "<line x1='" << x1 << "' y1='" << y1 << "' x2='" << x2 << "' y2='" << y2 << "' stroke='" << stroke << "' stroke-width='" << "' stroke-dasharray='" << stroke_dasharray << "'/>";
 }
 
+void histogram_lines(double IMAGE_WIDTH, double IMAGE_HEIGHT, string dashed)
+{
+    up_line(30, 0, IMAGE_WIDTH, 0, "#474A51", 4, "10 10");
+    up_line(IMAGE_WIDTH - 50, 0, IMAGE_WIDTH - 50, IMAGE_HEIGHT - 50, "#474A51", 4, "10 10");
+    up_line(IMAGE_WIDTH - 50, IMAGE_HEIGHT - 50, 30, IMAGE_HEIGHT - 50, "#474A51", 4, "10 10");
+    up_line(30, IMAGE_HEIGHT - 50, 30, 0, "#474A51", 4, dashed);
+}
+
 void show_histogram_svg(const vector<size_t> bins, size_t height_bin) {
     const auto IMAGE_WIDTH = 400;
     const auto IMAGE_HEIGHT = 700;
@@ -36,16 +44,13 @@ void show_histogram_svg(const vector<size_t> bins, size_t height_bin) {
     const auto TEXT_BASELINE = 20;
     const auto TEXT_WIDTH = 50;
     const auto BLOCK_WIDTH = 10;
+    string dashed = "0";
     const auto HISTOGRAM_MAX_WIDTH = IMAGE_WIDTH - TEXT_LEFT - TEXT_WIDTH;
     size_t max_bin = bins[0];
     test_height(height_bin, bins.size(), IMAGE_HEIGHT);
     for (size_t bin : bins) {
         if (max_bin < bin) max_bin = bin;
     }
-
-    /*svg_begin_text(IMAGE_WIDTH + 1000, IMAGE_HEIGHT + 1000);
-    svg_text(TEXT_LEFT, 20, "Histogram centered", height_bin / 2);
-    cout << "</svg>\n";*/
 
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
     double top = 0;
@@ -62,10 +67,8 @@ void show_histogram_svg(const vector<size_t> bins, size_t height_bin) {
         top += height_bin;
     }
 
-    up_line(30, 0, IMAGE_WIDTH, 0, "#474A51", 4, "10 10");
-    up_line(IMAGE_WIDTH - 50, 0, IMAGE_WIDTH - 50, IMAGE_HEIGHT - 50, "#474A51", 4, "10 10");
-    up_line(IMAGE_WIDTH - 50, IMAGE_HEIGHT - 50, 30, IMAGE_HEIGHT - 50, "#474A51", 4, "10 10");
-    up_line(30, IMAGE_HEIGHT - 50, 30, 0, "#474A51", 4, "10 10");
+    histogram_lines(IMAGE_WIDTH, IMAGE_HEIGHT, dashed);
+
     svg_end();
 }
 
