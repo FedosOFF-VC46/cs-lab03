@@ -11,7 +11,7 @@ void svg_begin(double width, double height) {
     cout << "<svg ";
     cout << "width='" << width << "' ";
     cout << "height='" << height << "' ";
-    cout << "viewBox='0 0 " << width << " " << height << "' ";
+    cout << "viewBox='-50 -50 " << width << " " << height << "' ";
     cout << "xmlns='http://www.w3.org/2000/svg'>\n";
 }
 
@@ -25,10 +25,14 @@ void svg_rect(double x, double y, double width, double height, string stroke, st
     cout << "<rect x='" << x << "' y='" << y << "' width='" << width << "' height='" << height << "' stroke='" << stroke << "' fill='" << fill << "'></rect>\n";
 
 }
+void up_line(double x1, double y1, double x2, double y2, string stroke, double strong_width, string stroke_dasharray) {
+    cout << "<line x1='" << x1 << "' y1='" << y1 << "' x2='" << x2 << "' y2='" << y2 << "' stroke='" << stroke << "' stroke-width='" << "' stroke-dasharray='" << stroke_dasharray << "'/>";
+}
+
 void show_histogram_svg(const vector<size_t> bins, size_t height_bin) {
     const auto IMAGE_WIDTH = 400;
     const auto IMAGE_HEIGHT = 700;
-    const auto TEXT_LEFT = 20;
+    const auto TEXT_LEFT = 40;
     const auto TEXT_BASELINE = 20;
     const auto TEXT_WIDTH = 50;
     const auto BLOCK_WIDTH = 10;
@@ -38,8 +42,14 @@ void show_histogram_svg(const vector<size_t> bins, size_t height_bin) {
     for (size_t bin : bins) {
         if (max_bin < bin) max_bin = bin;
     }
+
+    /*svg_begin_text(IMAGE_WIDTH + 1000, IMAGE_HEIGHT + 1000);
+    svg_text(TEXT_LEFT, 20, "Histogram centered", height_bin / 2);
+    cout << "</svg>\n";*/
+
     svg_begin(IMAGE_WIDTH, IMAGE_HEIGHT);
     double top = 0;
+    
     for (size_t bin : bins) {
         size_t height = bin;
         if (max_bin * BLOCK_WIDTH > HISTOGRAM_MAX_WIDTH) {
@@ -51,6 +61,11 @@ void show_histogram_svg(const vector<size_t> bins, size_t height_bin) {
         svg_rect(TEXT_WIDTH + height_bin, top, bin_width, height_bin, "#474A51", "#DC143C");
         top += height_bin;
     }
+
+    up_line(30, 0, IMAGE_WIDTH, 0, "#474A51", 4, "10 10");
+    up_line(IMAGE_WIDTH - 50, 0, IMAGE_WIDTH - 50, IMAGE_HEIGHT - 50, "#474A51", 4, "10 10");
+    up_line(IMAGE_WIDTH - 50, IMAGE_HEIGHT - 50, 30, IMAGE_HEIGHT - 50, "#474A51", 4, "10 10");
+    up_line(30, IMAGE_HEIGHT - 50, 30, 0, "#474A51", 4, "10 10");
     svg_end();
 }
 
